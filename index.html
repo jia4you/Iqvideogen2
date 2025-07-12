@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IQVideoGen - AI Video Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2em;
+      color: #00ffaa;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: #161b22;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="file"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #0d1117;
+      color: #fff;
+      box-shadow: inset 0 0 5px rgba(0, 255, 170, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #00ffaa;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #00ddaa;
+    }
+
+    .output {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .output video {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IQVideoGen</h1>
+    <p>AI-Powered Video Generator</p>
+  </header>
+
+  <div class="container">
+    <div class="input-group">
+      <label for="videoPrompt">Enter Video Prompt (any language):</label>
+      <input type="text" id="videoPrompt" placeholder="e.g., Create a 30s promo about AI music...">
+    </div>
+
+    <div class="input-group">
+      <label for="language">Select Language:</label>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="ar">Arabic</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label for="videoUpload">Or Upload Your Own Video:</label>
+      <input type="file" id="videoUpload" accept="video/*">
+    </div>
+
+    <button onclick="generateVideo()">Generate / Edit Video</button>
+
+    <div class="output" id="outputArea">
+      <!-- Generated video will be shown here -->
+    </div>
+  </div>
+
+  <script>
+    function generateVideo() {
+      const prompt = document.getElementById('videoPrompt').value;
+      const language = document.getElementById('language').value;
+      const videoFile = document.getElementById('videoUpload').files[0];
+
+      const output = document.getElementById('outputArea');
+      output.innerHTML = "<p>⏳ Processing with AI...</p>";
+
+      setTimeout(() => {
+        output.innerHTML = `
+          <p>✅ AI Video Generated Successfully!</p>
+          <video controls>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>`;
+      }, 2000); // Simulated delay
+    }
+  </script>
+</body>
+</html>
