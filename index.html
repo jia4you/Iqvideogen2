@@ -1,142 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IQVideoGen - AI Video Generator</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d1117;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header h1 {
-      font-size: 2em;
-      color: #00ffaa;
-    }
-
-    .container {
-      max-width: 500px;
-      width: 100%;
-      background: #161b22;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
-    }
-
-    .input-group {
-      margin-bottom: 15px;
-    }
-
-    .input-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    input[type="file"],
-    input[type="text"],
-    select {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background: #0d1117;
-      color: #fff;
-      box-shadow: inset 0 0 5px rgba(0, 255, 170, 0.2);
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #00ffaa;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #00ddaa;
-    }
-
-    .output {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .output video {
-      max-width: 100%;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQVideoGen – AI Video Editor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        video { max-width: 100%; height: auto; margin-top: 20px; border: 1px solid #ddd; display: block; }
+        textarea, input[type="file"], input[type="text"] {
+            width: calc(100% - 22px); /* Account for padding and border */
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background-color: #0056b3; }
+        .templates-section { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        h1, h2 { color: #333; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>IQVideoGen</h1>
-    <p>AI-Powered Video Generator</p>
-  </header>
+    <div class="container">
+        <h1>🎬 IQVideoGen – AI Video Editor</h1>
+        <p>Upload a video and tell our AI what to do!</p>
 
-  <div class="container">
-    <div class="input-group">
-      <label for="videoPrompt">Enter Video Prompt (any language):</label>
-      <input type="text" id="videoPrompt" placeholder="e.g., Create a 30s promo about AI music...">
+        <!-- Ad Banner -->
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '75e1981f07fee0dbebc600d827870c36',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/75e1981f07fee0dbebc600d827870c36/invoke.js"></script>
+
+        <form id="videoForm">
+            <label for="videoFile">Upload Video:</label>
+            <input type="file" id="videoFile" accept="video/*" required>
+
+            <label for="commandInput">AI Command:</label>
+            <textarea id="commandInput" placeholder="e.g., Make this video vertical, Add subtitles, Convert to TikTok format" rows="3"></textarea>
+
+            <button type="button" onclick="startVoice()">🎤 Speak Command</button>
+            <button type="submit">🚀 Generate Video</button>
+        </form>
+
+        <div class="templates-section">
+            <h2>📦 Templates:</h2>
+            <button onclick="applyTemplate('Convert to TikTok format')">TikTok</button>
+            <button onclick="applyTemplate('Add subtitles')">Subtitled</button>
+            <button onclick="applyTemplate('Make this video vertical')">Vertical</button>
+        </div>
+
+        <div id="output"></div>
+
+        <!-- Ad Container -->
+        <div id="container-0a6b4d106d05634333c11d79c1f29c1d"></div>
     </div>
 
-    <div class="input-group">
-      <label for="language">Select Language:</label>
-      <select id="language">
-        <option value="en">English</option>
-        <option value="hi">Hindi</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="ar">Arabic</option>
-      </select>
-    </div>
+    <script>
+        function startVoice() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false; // Get final results immediately
+            recognition.maxAlternatives = 1; // Get only the most probable result
 
-    <div class="input-group">
-      <label for="videoUpload">Or Upload Your Own Video:</label>
-      <input type="file" id="videoUpload" accept="video/*">
-    </div>
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                document.getElementById('commandInput').value = speechResult;
+                console.log('Voice recognized:', speechResult);
+            };
 
-    <button onclick="generateVideo()">Generate / Edit Video</button>
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                alert('Speech recognition failed. Please try typing your command.');
+            };
 
-    <div class="output" id="outputArea">
-      <!-- Generated video will be shown here -->
-    </div>
-  </div>
+            recognition.onend = function() {
+                console.log('Speech recognition ended.');
+            };
 
-  <script>
-    function generateVideo() {
-      const prompt = document.getElementById('videoPrompt').value;
-      const language = document.getElementById('language').value;
-      const videoFile = document.getElementById('videoUpload').files[0];
+            recognition.start();
+            console.log('Speech recognition started...');
+        }
 
-      const output = document.getElementById('outputArea');
-      output.innerHTML = "<p>⏳ Processing with AI...</p>";
+        function applyTemplate(text) {
+            document.getElementById('commandInput').value = text;
+        }
 
-      setTimeout(() => {
-        output.innerHTML = `
-          <p>✅ AI Video Generated Successfully!</p>
-          <video controls>
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>`;
-      }, 2000); // Simulated delay
-    }
-  </script>
+        document.getElementById('videoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const file = document.getElementById('videoFile').files[0];
+            const command = document.getElementById('commandInput').value;
+
+            if (!file) {
+                alert('Please select a video file.');
+                return;
+            }
+            if (!command) {
+                alert('Please enter an AI command or select a template.');
+                return;
+            }
+
+            formData.append('video', file);
+            formData.append('command', command);
+
+            // Show a loading message
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '<p>Processing video... This might take a few moments.</p>';
+
+            try {
+                const res = await fetch('http://localhost:4000/api/process-video', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.error || 'Unknown error occurred.');
+                }
+
+                const data = await res.json();
+
+                if (data.previewUrl) {
+                    outputDiv.innerHTML = `
+                        <h2>Processed Video:</h2>
+                        <video src="${data.previewUrl}" controls autoplay></video>
+                        <p><a href="${data.previewUrl}" target="_blank" download>Download Processed Video</a></p>
+                    `;
+                } else {
+                    outputDiv.innerHTML = '<p>No preview URL received. Something went wrong.</p>';
+                }
+            } catch (err) {
+                outputDiv.innerHTML = `<p style="color: red;">Error processing video: ${err.message}</p>`;
+                console.error('Frontend error:', err);
+            }
+        });
+    </script>
+
+    <!-- Additional Ad Scripts -->
+    <script async="async" data-cfasync="false" src="//pl27131774.profitableratecpm.com/0a6b4d106d05634333c11d79c1f29c1d/invoke.js"></script>
+    <script type='text/javascript' src='//pl27131769.profitableratecpm.com/ee/6f/82/ee6f82f0ca7d6a364dd17105872d2755.js'></script>
 </body>
 </html>
